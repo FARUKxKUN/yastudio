@@ -1,14 +1,15 @@
 "use client";
 
 import { ArrowLeft, CheckCircle2, RotateCcw } from "lucide-react";
-import type { Project } from "@/types/project";
+import type { Project, VideoScript } from "@/types/project";
 import { getPerson } from "@/lib/mock-data";
 import { STAGE_NEXT_ACTION } from "@/lib/stage-config";
 import { formatRelativeTime, formatCount } from "@/lib/format";
 import { StagePill } from "@/components/ui/StagePill";
 import { Button } from "@/components/ui/Button";
 import { Avatar } from "@/components/ui/Avatar";
-import { TextBlock, ScriptBlock } from "@/components/project-detail/TextBlock";
+import { TextBlock } from "@/components/project-detail/TextBlock";
+import { ScriptEditor } from "@/components/project-detail/ScriptEditor";
 import { FileList } from "@/components/project-detail/FileList";
 import { FileUploadZone } from "@/components/project-detail/FileUploadZone";
 import { FilmstripProgress } from "@/components/project-detail/FilmstripProgress";
@@ -19,6 +20,7 @@ interface ProjectDetailViewProps {
   project: Project;
   onBack: () => void;
   onAssignEditor: (editorId: string | null) => void;
+  onSetScript: (script: VideoScript | null) => void;
   onAddSourceFile: (name: string, sizeKb: number) => void;
   onAddDeliverable: (name: string, sizeKb: number) => void;
   onAddComment: (text: string) => void;
@@ -31,6 +33,7 @@ export function ProjectDetailView({
   project,
   onBack,
   onAssignEditor,
+  onSetScript,
   onAddSourceFile,
   onAddDeliverable,
   onAddComment,
@@ -86,7 +89,7 @@ export function ProjectDetailView({
             </div>
 
             <TextBlock label="Client Instructions" content={project.instructions} />
-            <ScriptBlock script={project.script} />
+            <ScriptEditor script={project.script} onChange={onSetScript} />
 
             <FileList
               label="Source Files From Client"

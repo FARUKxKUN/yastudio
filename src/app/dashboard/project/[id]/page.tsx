@@ -16,6 +16,7 @@ export default function ProjectDetailPage() {
     isReady,
     moveStage,
     assignEditor,
+    setScript,
     addSourceFile,
     addDeliverable,
     addComment,
@@ -56,6 +57,7 @@ export default function ProjectDetailPage() {
       project={project}
       onBack={goBack}
       onAssignEditor={(editorId) => assignEditor(project.id, editorId)}
+      onSetScript={(script) => setScript(project.id, script)}
       onAddSourceFile={(name, sizeKb) => addSourceFile(project.id, { name, sizeKb })}
       onAddDeliverable={(name, sizeKb) => addDeliverable(project.id, { name, sizeKb })}
       onAddComment={(text) =>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { Project, RevisionComment, Stage } from "@/types/project";
+import type { Project, RevisionComment, Stage, VideoScript } from "@/types/project";
 import { loadProjects, saveProjects } from "@/lib/storage";
 import { generateId, nowTimecode } from "@/lib/format";
 
@@ -52,6 +52,13 @@ export function useProjects() {
   const assignEditor = useCallback(
     (id: string, editorId: string | null) => {
       updateProject(id, (p) => ({ ...p, editorId }));
+    },
+    [updateProject]
+  );
+
+  const setScript = useCallback(
+    (id: string, script: VideoScript | null) => {
+      updateProject(id, (p) => ({ ...p, script }));
     },
     [updateProject]
   );
@@ -136,6 +143,7 @@ export function useProjects() {
     commit,
     moveStage,
     assignEditor,
+    setScript,
     addSourceFile,
     addDeliverable,
     addComment,

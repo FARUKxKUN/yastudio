@@ -66,8 +66,9 @@ export interface RevisionComment {
 }
 
 export interface VideoScript {
-  type: "text" | "link";
-  content: string;
+  type: "text" | "link" | "file";
+  content: string; // text body, URL, or file name depending on type
+  sizeKb?: number; // only present when type is "file"
 }
 
 export interface Project {

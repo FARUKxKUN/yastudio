@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { ExternalLink } from "lucide-react";
-import type { VideoScript } from "@/types/project";
 
 const TRUNCATE_LENGTH = 220;
 
@@ -35,38 +33,4 @@ export function TextBlock({ label, content }: TextBlockProps) {
       )}
     </section>
   );
-}
-
-export function ScriptBlock({ script }: { script: VideoScript | null }) {
-  if (!script) {
-    return (
-      <section className="flex flex-col gap-2">
-        <h3 className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-text-faint)]">
-          Video Script
-        </h3>
-        <p className="text-sm text-[var(--color-text-faint)]">No script provided.</p>
-      </section>
-    );
-  }
-
-  if (script.type === "link") {
-    return (
-      <section className="flex flex-col gap-2">
-        <h3 className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-text-faint)]">
-          Video Script
-        </h3>
-        <a
-          href={script.content}
-          target="_blank"
-          rel="noreferrer"
-          className="focus-ring inline-flex w-fit cursor-pointer items-center gap-1.5 rounded-[var(--radius)] border border-[var(--color-border-strong)] px-3 py-1.5 text-sm text-[var(--color-text)] transition-colors duration-200 hover:bg-[var(--color-surface-hover)]"
-        >
-          <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.75} aria-hidden="true" />
-          Open script document
-        </a>
-      </section>
-    );
-  }
-
-  return <TextBlock label="Video Script" content={script.content} />;
 }
