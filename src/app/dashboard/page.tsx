@@ -1,34 +1,21 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { LayoutGrid, List as ListIcon } from "lucide-react";
 import { useProjects } from "@/hooks/useProjects";
 import { KanbanBoard } from "@/components/kanban/KanbanBoard";
 import { ListView } from "@/components/kanban/ListView";
-import { ProjectPanel } from "@/components/project-detail/ProjectPanel";
-import { CURRENT_USER } from "@/lib/current-user";
 
 type ViewMode = "board" | "list";
 
 export default function DashboardPage() {
-  const {
-    projects,
-    isReady,
-    moveStage,
-    assignEditor,
-    addSourceFile,
-    addDeliverable,
-    addComment,
-    toggleCommentResolved,
-  } = useProjects();
+  const { projects, isReady, moveStage } = useProjects();
+  const router = useRouter();
 
   const [view, setView] = useState<ViewMode>("board");
-  const [openProjectId, setOpenProjectId] = useState<string | null>(null);
 
-  const activeProject = useMemo(
-    () => projects.find((p) => p.id === openProjectId) ?? null,
-    [projects, openProjectId]
-  );
+  const openProject = (id: string) => router.push(`/dashboard/project/${id}`);
 
   if (!isReady) {
     return (
@@ -83,31 +70,11 @@ export default function DashboardPage() {
 
       <div className="min-h-0 flex-1">
         {view === "board" ? (
-          <KanbanBoard projects={projects} onOpen={setOpenProjectId} onDrop={moveStage} />
+          <KanbanBoard projects={projects} onOpen={openProject} onDrop={moveStage} />
         ) : (
-          <ListView projects={projects} onOpen={setOpenProjectId} />
+          <ListView projects={projects} onOpen={openProject} />
         )}
       </div>
-
-      {activeProject && (
-        <ProjectPanel
-          project={activeProject}
-          onClose={() => setOpenProjectId(null)}
-          onAssignEditor={(editorId) => assignEditor(activeProject.id, editorId)}
-          onAddSourceFile={(name, sizeKb) => addSourceFile(activeProject.id, { name, sizeKb })}
-          onAddDeliverable={(name, sizeKb) => addDeliverable(activeProject.id, { name, sizeKb })}
-          onAddComment={(text) =>
-            addComment(activeProject.id, {
-              authorId: CURRENT_USER.id,
-              authorRole: "admin",
-              text,
-            })
-          }
-          onToggleResolved={(commentId) => toggleCommentResolved(activeProject.id, commentId)}
-          onMoveStage={(stage) => moveStage(activeProject.id, stage)}
-          onRequestRevision={() => moveStage(activeProject.id, "revision")}
-        />
-      )}
     </div>
   );
 }
